@@ -4,7 +4,9 @@ when defined(linux):
   const
     LibG = "libcsfml-graphics.so.2.0"
     LibS = "libcsfml-system.so.2.0"
-    LibW =  "libcsfml-window.so.2.0"
+    LibW = "libcsfml-window.so.2.0"
+else:
+  {.error: "Platform unsupported".}
 {.pragma: pf, pure, final.}
 type
   PClock* = ptr TClock
@@ -185,6 +187,8 @@ type
   TVertexArray* {.pf.} = object
   PView* = ptr TView
   TView* {.pf.} = object
+  PRenderTexture* = ptr TRenderTexture
+  TRenderTexture* {.pf.} = object
 
   PShape* = ptr TShape
   TShape* {.pf.} = object
@@ -381,12 +385,111 @@ proc resetGlStates*(window: PRenderWindow) {.
 proc capture*(window: PRenderWindow): PImage {.
   cdecl, importc: "sfRenderWindow_capture", dynlib: LibG.}
 
-proc newIntRect*(left, top, width, height: cint): TIntRect =
+#Construct a new render texture
+proc newRenderTexture*(width, height: cint; depthBuffer: Bool): PRenderTexture {.
+  cdecl, importc: "sfRenderTexture_create", dynlib: LibG.}
+#Destroy an existing render texture
+proc destroy*(renderTexture: PRenderTexture){.
+  cdecl, importc: "sfRenderTexture_destroy", dynlib: LibG.}
+#Get the size of the rendering region of a render texture
+proc getSize*(renderTexture: PRenderTexture): TVector2i {.
+  cdecl, importc: "sfRenderTexture_getSize", dynlib: LibG.}
+#Activate or deactivate a render texture as the current target for rendering
+proc setActive*(renderTexture: PRenderTexture; active: bool): bool{.
+  cdecl, importc: "sfRenderTexture_setActive", dynlib: LibG.}
+#Update the contents of the target texture
+proc display*(renderTexture: PRenderTexture){.
+  cdecl, importc: "sfRenderTexture_display", dynlib: LibG.}
+#Clear the rendertexture with the given color
+proc clear*(renderTexture: PRenderTexture; color: TColor){.
+  cdecl, importc: "sfRenderTexture_clear", dynlib: LibG.}
+#Change the current active view of a render texture
+proc setView*(renderTexture: PRenderTexture; view: PView){.
+  cdecl, importc: "sfRenderTexture_setView", dynlib: LibG.}
+#Get the current active view of a render texture
+proc getView*(renderTexture: PRenderTexture): PView{.
+  cdecl, importc: "sfRenderTexture_getView", dynlib: LibG.}
+#Get the default view of a render texture
+proc getDefaultView*(renderTexture: PRenderTexture): PView{.
+  cdecl, importc: "sfRenderTexture_getDefaultView", dynlib: LibG.}
+#Get the viewport of a view applied to this target
+proc getViewport*(renderTexture: PRenderTexture; view: PView): TIntRect{.
+  cdecl, importc: "sfRenderTexture_getViewport", dynlib: LibG.}
+#Convert a point in texture coordinates into view coordinates
+proc convertCoords*(renderTexture: PRenderTexture; point: TVector2i; targetView: PView): TVector2f{.
+  cdecl, importc: "sfRenderTexture_convertCoords", dynlib: LibG.}
+#Draw a drawable object to the render-target
+proc draw*(renderTexture: PRenderTexture; sprite: PSprite; states: PRenderStates){.
+  cdecl, importc: "sfRenderTexture_drawSprite", dynlib: LibG.}
+proc draw*(renderTexture: PRenderTexture; text: PText; states: PRenderStates){.
+  cdecl, importc: "sfRenderTexture_drawText", dynlib: LibG.}
+proc draw*(renderTexture: PRenderTexture; shape: PShape; states: PRenderStates){.
+  cdecl, importc: "sfRenderTexture_drawShape", dynlib: LibG.}
+proc draw*(renderTexture: PRenderTexture; shape: PCircleShape; 
+            states: PRenderStates){.
+  cdecl, importc: "sfRenderTexture_drawCircleShape", dynlib: LibG.}
+proc draw*(renderTexture: PRenderTexture; shape: PConvexShape; 
+            states: PRenderStates){.
+  cdecl, importc: "sfRenderTexture_drawConvexShape", dynlib: LibG.}
+proc draw*(renderTexture: PRenderTexture; shape: PRectangleShape; 
+            states: PRenderStates){.
+  cdecl, importc: "sfRenderTexture_drawRectangleShape", dynlib: LibG.}
+proc draw*(renderTexture: PRenderTexture; va: PVertexArray; 
+            states: PRenderStates){.
+  cdecl, importc: "sfRenderTexture_drawVertexArray", dynlib: LibG.}
+#Draw primitives defined by an array of vertices to a render texture
+proc draw*(renderTexture: PRenderTexture; vertices: PVertex; vertexCount: cint; 
+            primitiveType: TPrimitiveType; states: PRenderStates){.
+  cdecl, importc: "sfRenderTexture_drawPrimitives", dynlib: LibG.}
+#Save the current OpenGL render states and matrices
+#/
+#/ This function can be used when you mix SFML drawing
+#/ and direct OpenGL rendering. Combined with popGLStates,
+#/ it ensures that:
+#/ * SFML's internal states are not messed up by your OpenGL code
+#/ * your OpenGL states are not modified by a call to a SFML function
+#/
+#/ Note that this function is quite expensive: it saves all the
+#/ possible OpenGL states and matrices, even the ones you
+#/ don't care about. Therefore it should be used wisely.
+#/ It is provided for convenience, but the best results will
+#/ be achieved if you handle OpenGL states yourself (because
+#/ you know which states have really changed, and need to be
+#/ saved and restored). Take a look at the resetGLStates
+#/ function if you do so.
+proc pushGLStates*(renderTexture: PRenderTexture){.
+  cdecl, importc: "sfRenderTexture_pushGLStates", dynlib: LibG.}
+#Restore the previously saved OpenGL render states and matrices
+#/
+#/ See the description of pushGLStates to get a detailed
+#/ description of these functions.
+proc popGLStates*(renderTexture: PRenderTexture){.
+  cdecl, importc: "sfRenderTexture_popGLStates", dynlib: LibG.}
+#Reset the internal OpenGL states so that the target is ready for drawing
+#/
+#/ This function can be used when you mix SFML drawing
+#/ and direct OpenGL rendering, if you choose not to use
+#/ pushGLStates/popGLStates. It makes sure that all OpenGL
+#/ states needed by SFML are set, so that subsequent sfRenderTexture_draw*()
+#/ calls will work as expected.
+proc resetGLStates*(renderTexture: PRenderTexture){.
+  cdecl, importc: "sfRenderTexture_resetGLStates", dynlib: LibG.}
+#Get the target texture of a render texture
+proc getTexture*(renderTexture: PRenderTexture): PTexture{.
+  cdecl, importc: "sfRenderTexture_getTexture", dynlib: LibG.}
+#Enable or disable the smooth filter on a render texture
+proc setSmooth*(renderTexture: PRenderTexture; smooth: bool){.
+  cdecl, importc: "sfRenderTexture_setSmooth", dynlib: LibG.}
+#Tell whether the smooth filter is enabled or not for a render texture
+proc isSmooth*(renderTexture: PRenderTexture): bool {.
+  cdecl, importc: "sfRenderTexture_isSmooth", dynlib: LibG.}
+
+proc intRect*(left, top, width, height: cint): TIntRect =
   result.left   = left
   result.top    = top
   result.width  = width
   result.height = height
-proc newFloatRect*(left, top, width, height: cfloat): TFloatRect =
+proc floatRect*(left, top, width, height: cfloat): TFloatRect =
   result.left   = left
   result.top    = top 
   result.width  = width
@@ -418,9 +521,9 @@ proc getLineSpacing*(font: PFont, characterSize: cint): cint {.
   cdecl, importc: "sfFont_getLineSpacing", dynlib: LibG.}
 proc getTexture*(font: PFont, characterSize: cint): PTexture {.
   cdecl, importc: "sfFont_getTexture", dynlib: LibG.}
+#getDefaultFont() has been removed from CSFML
 proc getDefaultFont*(): PFont {.
-  cdecl, importc: "sfFont_getDefaultFont", dynlib: LibG.}
-
+  error, cdecl, importc: "sfFont_getDefaultFont", dynlib: LibG.}
 
 proc newCircleShape*(): PCircleShape {.
   cdecl, importc: "sfCircleShape_create", dynlib: LibG.}
@@ -610,7 +713,8 @@ proc getSize*(image: PImage): TVector2i {.
   cdecl, importc: "sfImage_getSize", dynlib: LibG.}
 proc createMask*(image: PImage, color: TColor, alpha: cchar) {.
   cdecl, importc: "sfImage_createMaskFromColor", dynlib: LibG.}
-proc copy*(destination, source: PImage, destX, destY: cint, sourceRect: TIntRect, applyAlpha: bool) {.
+proc copy*(destination, source: PImage, destX, destY: cint;
+            sourceRect: TIntRect, applyAlpha: bool) {.
   cdecl, importc: "sfImage_copyImage", dynlib: LibG.}
 proc setPixel*(image: PImage, x, y: cint, color: TColor) {.
   cdecl, importc: "sfImage_setPixel", dynlib: LibG.}
@@ -907,18 +1011,23 @@ proc newContextSettings*(depthBits: cint = 0,
   res.minorVersion = minorVersion
   result = addr(res)
 
+proc newText*(str: string, font: PFont, size: int): PText =
+  result = newText()
+  result.setString(str)
+  result.setFont(font)
+  result.setCharacterSize(size.cint)
 proc newVertexArray*(primitiveType: TPrimitiveType, vertexCount: cint = 0): PVertexArray =
   result = newVertexArray()
   result.setPrimitiveType(primitiveType)
   if vertexCount != 0:
     result.resize(vertexCount)
-proc newVideoMode*(width, height, bpp: cint): TVideoMode =
+proc videoMode*(width, height, bpp: cint): TVideoMode =
   result.width = width
   result.height = height
   result.bitsPerPixel = bpp
 
-proc `[]`*(a: PVertexArray, index: cint): PVertex =
-  return getVertex(a, index)
+proc `[]`*(a: PVertexArray, index: int): PVertex =
+  return getVertex(a, index.cint)
 
 proc `$` *(a: TContextSettings): string =
   return "<TContextSettings stencil=$1 aa=$2 major=$3 minor=$4 depth=$5>" % [
