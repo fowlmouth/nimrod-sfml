@@ -254,23 +254,24 @@ a.reference:hover {color: #E00000;background-color: #ffff00;display: margin;
   <li><a class="reference" href="#102"><wbr />vec2f</a></li>
   <li><a class="reference" href="#103">`<wbr />+`</a></li>
   <li><a class="reference" href="#104">`<wbr />-`</a></li>
-  <li><a class="reference" href="#105">`<wbr />*`</a></li>
+  <li><a class="reference" href="#105">`<wbr />-`</a></li>
   <li><a class="reference" href="#106">`<wbr />*`</a></li>
-  <li><a class="reference" href="#107">`<wbr />/`</a></li>
-  <li><a class="reference" href="#108">`<wbr />+=`</a></li>
-  <li><a class="reference" href="#109">`<wbr />-=`</a></li>
-  <li><a class="reference" href="#110">`<wbr />*=`</a></li>
+  <li><a class="reference" href="#107">`<wbr />*`</a></li>
+  <li><a class="reference" href="#108">`<wbr />/`</a></li>
+  <li><a class="reference" href="#109">`<wbr />+=`</a></li>
+  <li><a class="reference" href="#110">`<wbr />-=`</a></li>
   <li><a class="reference" href="#111">`<wbr />*=`</a></li>
-  <li><a class="reference" href="#112">`<wbr />/=`</a></li>
-  <li><a class="reference" href="#113">`<wbr />&lt;`</a></li>
-  <li><a class="reference" href="#114">`<wbr />&lt;=`</a></li>
-  <li><a class="reference" href="#115">`<wbr />==`</a></li>
-  <li><a class="reference" href="#116"><wbr />length</a></li>
-  <li><a class="reference" href="#117"><wbr />length<wbr />Sq</a></li>
-  <li><a class="reference" href="#118"><wbr />distance<wbr />Sq</a></li>
-  <li><a class="reference" href="#119"><wbr />distance</a></li>
-  <li><a class="reference" href="#120"><wbr />permul</a></li>
-  <li><a class="reference" href="#121"><wbr />rotate</a></li>
+  <li><a class="reference" href="#112">`<wbr />*=`</a></li>
+  <li><a class="reference" href="#113">`<wbr />/=`</a></li>
+  <li><a class="reference" href="#114">`<wbr />&lt;`</a></li>
+  <li><a class="reference" href="#115">`<wbr />&lt;=`</a></li>
+  <li><a class="reference" href="#116">`<wbr />==`</a></li>
+  <li><a class="reference" href="#117"><wbr />length</a></li>
+  <li><a class="reference" href="#118"><wbr />length<wbr />Sq</a></li>
+  <li><a class="reference" href="#119"><wbr />distance<wbr />Sq</a></li>
+  <li><a class="reference" href="#120"><wbr />distance</a></li>
+  <li><a class="reference" href="#121"><wbr />permul</a></li>
+  <li><a class="reference" href="#122"><wbr />rotate</a></li>
 
   </ul>
 </li>
@@ -299,75 +300,79 @@ a.reference:hover {color: #E00000;background-color: #ffff00;display: margin;
 <dd>
 
 </dd>
-<dt id="104"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">-</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TVector2f</span></pre></dt>
+<dt id="104"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">-</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TVector2f</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="105"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">*</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">cfloat</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TVector2f</span></pre></dt>
+<dt id="105"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">-</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TVector2f</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="106"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">*</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TVector2f</span></pre></dt>
+<dt id="106"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">*</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">cfloat</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TVector2f</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="107"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">/</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">cfloat</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TVector2f</span></pre></dt>
+<dt id="107"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">*</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TVector2f</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="108"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">+=</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span></pre></dt>
+<dt id="108"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">/</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">cfloat</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TVector2f</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="109"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">-=</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span></pre></dt>
+<dt id="109"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">+=</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="110"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">*=</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">float</span><span class="Other">)</span></pre></dt>
+<dt id="110"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">-=</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="111"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">*=</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span></pre></dt>
+<dt id="111"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">*=</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">float</span><span class="Other">)</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="112"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">/=</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">float</span><span class="Other">)</span></pre></dt>
+<dt id="112"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">*=</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="113"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">&lt;</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dt id="113"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">/=</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">float</span><span class="Other">)</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="114"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">&lt;=</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dt id="114"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">&lt;</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="115"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">==</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dt id="115"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">&lt;=</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="116"><pre><span class="Keyword">proc</span> <span class="Identifier">length</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float</span></pre></dt>
+<dt id="116"><pre><span class="Keyword">proc</span> <span class="Other">`</span><span class="Operator">==</span><span class="Other">`</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="117"><pre><span class="Keyword">proc</span> <span class="Identifier">lengthSq</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float</span></pre></dt>
+<dt id="117"><pre><span class="Keyword">proc</span> <span class="Identifier">length</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="118"><pre><span class="Keyword">proc</span> <span class="Identifier">distanceSq</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float</span></pre></dt>
+<dt id="118"><pre><span class="Keyword">proc</span> <span class="Identifier">lengthSq</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="119"><pre><span class="Keyword">proc</span> <span class="Identifier">distance</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float</span></pre></dt>
+<dt id="119"><pre><span class="Keyword">proc</span> <span class="Identifier">distanceSq</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="120"><pre><span class="Keyword">proc</span> <span class="Identifier">permul</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TVector2f</span></pre></dt>
+<dt id="120"><pre><span class="Keyword">proc</span> <span class="Identifier">distance</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float</span></pre></dt>
 <dd>
 
 </dd>
-<dt id="121"><pre><span class="Keyword">proc</span> <span class="Identifier">rotate</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">phi</span><span class="Other">:</span> <span class="Identifier">float</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TVector2f</span></pre></dt>
+<dt id="121"><pre><span class="Keyword">proc</span> <span class="Identifier">permul</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TVector2f</span></pre></dt>
+<dd>
+
+</dd>
+<dt id="122"><pre><span class="Keyword">proc</span> <span class="Identifier">rotate</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">TVector2f</span><span class="Other">;</span> <span class="Identifier">phi</span><span class="Other">:</span> <span class="Identifier">float</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TVector2f</span></pre></dt>
 <dd>
 
 </dd>
@@ -376,7 +381,7 @@ a.reference:hover {color: #E00000;background-color: #ffff00;display: margin;
 
 </div>
 
-<small>Generated: 2012-07-30 16:48:36 UTC</small>
+<small>Generated: 2012-08-09 16:04:00 UTC</small>
 </div>
 </body>
 </html>

@@ -107,8 +107,7 @@ type
   TJoystickAxis*{.size: sizeof(cint).} = enum 
     JoystickX, JoystickY, JoystickZ, JoystickR,      
     JoystickU, JoystickV, JoystickPovX, JoystickPovY
-  TSizeEvent*{.pf.} = object 
-    kind*: TEventType
+  TSizeEvent*{.pf.} = object
     width*: cint
     height*: cint
   TMouseButton*{.size: sizeof(cint).} = enum 
