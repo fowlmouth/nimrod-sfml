@@ -7,6 +7,7 @@ when defined(linux):
     LibW = "libcsfml-window.so.2.0"
 else:
   {.error: "Platform unsupported".}
+{.deadCodeElim: on.}
 {.pragma: pf, pure, final.}
 type
   PClock* = ptr TClock
@@ -82,7 +83,7 @@ type
   TTextEvent*{.pf.} = object
     unicode*: cint
   PEvent* = ptr TEvent
-  TEvent*{.final, pure.} = object
+  TEvent*{.pf.} = object
     case kind*: TEventType
     of EvtKeyPressed, EvtKeyReleased: 
       key*: TKeyEvent
@@ -102,8 +103,7 @@ type
       mouseMove*: TMouseMoveEvent
     of EvtMouseWheelMoved:
       mouseWheel*: TMouseWheelEvent
-    else:
-      pad*: array[0..31, byte]
+    else: nil
   TJoystickAxis*{.size: sizeof(cint).} = enum 
     JoystickX, JoystickY, JoystickZ, JoystickR,      
     JoystickU, JoystickV, JoystickPovX, JoystickPovY
@@ -961,18 +961,22 @@ proc unbindGL*(shader: PShader) {.
 proc shaderIsAvailable*(): bool {.
   cdecl, importc: "sfShader_isAvailable", dynlib: LibG.}
 
-proc newColor*(red, green, blue: cchar): TColor {.
+proc color*(red, green, blue: cchar): TColor {.
   cdecl, importc: "sfColor_fromRGB", dynlib: LibG.}
-proc newColor*(red, green, blue: int): TColor {.inline.} =
-  return newColor(red.cchar, green.cchar, blue.cchar)
-proc newColor*(red, green, blue, alpha: cchar): TColor {.
+proc color*(red, green, blue: int): TColor {.inline.} =
+  return color(red.cchar, green.cchar, blue.cchar)
+proc color*(red, green, blue, alpha: cchar): TColor {.
   cdecl, importc: "sfColor_fromRGBA", dynlib: LibG.}
-proc newColor*(red, green, blue, alpha: int): TColor {.inline.} =
-  return newColor(red.cchar, green.cchar, blue.cchar, alpha.cchar)
+proc color*(red, green, blue, alpha: int): TColor {.inline.} =
+  return color(red.cchar, green.cchar, blue.cchar, alpha.cchar)
 proc `+`*(color1, color2: TColor): TColor {.
   cdecl, importc: "sfColor_add", dynlib: LibG.}
 proc `*`*(color1, color2: TColor): TColor {.
   cdecl, importc: "sfColor_modulate", dynlib: LibG.}
+proc newColor*(r,g,b: int): TColor {.inline.} =
+  return color(r,g,b)
+proc newColor*(r,g,b,a: int): TColor {.inline.} = 
+  return color(r,g,b,a)
 
 proc newClock*(): PClock {.
   cdecl, importc: "sfClock_create", dynlib: LibS.}

@@ -1,5 +1,5 @@
 import sfml, math, strutils
-
+{.deadCodeElim: on.}
 proc vec2i*(x, y: int): TVector2i =
   result.x = x.cint
   result.y = y.cint
