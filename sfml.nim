@@ -1005,15 +1005,17 @@ proc newContextSettings*(depthBits: cint = 0,
                          stencilBits: cint = 0,
                          antialiasingLevel: cint = 0,
                          majorVersion: cint = 0,
-                         minorVersion: cint = 0): PContextSettings =
-  var res: TContextSettings
-  res.depthBits = depthBits
-  res.stencilBits = stencilBits
-  res.antialiasingLevel = antialiasingLevel
-  res.majorVersion = majorVersion
-  res.minorVersion = minorVersion
-  result = addr(res)
+                         minorVersion: cint = 0): TContextSettings =
+  result.depthBits = depthBits
+  result.stencilBits = stencilBits
+  result.antialiasingLevel = antialiasingLevel
+  result.majorVersion = majorVersion
+  result.minorVersion = minorVersion
 
+proc newCircleShape*(radius: cfloat; pointCount: cint = 30): PCircleShape = 
+  result = newCircleShape()
+  result.setRadius radius
+  result.setPointCount pointCount
 proc newText*(str: string, font: PFont, size: int): PText =
   result = newText()
   result.setString(str)
