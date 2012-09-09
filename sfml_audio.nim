@@ -119,7 +119,7 @@ proc setBuffer*(sound: PSound; buffer: PSoundBuffer){.
   cdecl, importc: "sfSound_setBuffer", dynlib: Lib.}
 #//////////////////////////////////////////////////////////
 #/ \brief Get the audio buffer attached to a sound
-proc sfSound_getBuffer*(sound: PSound): PSoundBuffer{.
+proc getBuffer*(sound: PSound): PSoundBuffer{.
   cdecl, importc: "sfSound_getBuffer", dynlib: Lib.}
 #//////////////////////////////////////////////////////////
 #/ \brief Set whether or not a sound should loop after reaching the end
@@ -128,7 +128,7 @@ proc sfSound_getBuffer*(sound: PSound): PSoundBuffer{.
 #/ reaching the end and so on, until it is stopped or
 #/ sfSound_setLoop(sound, sfFalse) is called.
 #/ The default looping state for sounds is false.
-proc sfSound_setLoop*(sound: PSound; loop: bool){.
+proc setLoop*(sound: PSound; loop: bool){.
   cdecl, importc: "sfSound_setLoop", dynlib: Lib.}
 #//////////////////////////////////////////////////////////
 #/ \brief Tell whether or not a soud is in loop mode
