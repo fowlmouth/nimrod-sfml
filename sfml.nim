@@ -56,10 +56,10 @@ type
     EvtJoystickDisconnected
   TKeyEvent*{.pf.} = object 
     code*: TKeyCode
-    alt*    : bool
-    control*: bool
-    shift*  : bool
-    system* : bool
+    alt*    : cint
+    control*: cint
+    shift*  : cint
+    system* : cint
   TJoystickConnectEvent*{.pf.} = object
     joystickId*: cint
   TJoystickButtonEvent*{.pf.} = object
