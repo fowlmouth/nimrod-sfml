@@ -1016,6 +1016,10 @@ proc newContextSettings*(depthBits: cint = 0,
   result.majorVersion = majorVersion
   result.minorVersion = minorVersion
 
+proc newSprite*(texture: PTexture; rect: var TIntRect): PSprite =
+  result = newSprite()
+  result.setTexture texture, false
+  result.setTextureRect rect
 proc newCircleShape*(radius: cfloat; pointCount: cint = 30): PCircleShape = 
   result = newCircleShape()
   result.setRadius radius
