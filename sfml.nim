@@ -1024,6 +1024,9 @@ proc newCircleShape*(radius: cfloat; pointCount: cint = 30): PCircleShape =
   result = newCircleShape()
   result.setRadius radius
   result.setPointCount pointCount
+proc newRectangleShape*(size: TVector2f): PRectangleShape =
+  result = newRectangleShape()
+  result.setSize size
 proc newText*(str: string, font: PFont, size: int): PText =
   result = newText()
   result.setString(str)
