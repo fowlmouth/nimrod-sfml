@@ -422,27 +422,27 @@ proc getViewport*(renderTexture: PRenderTexture; view: PView): TIntRect{.
 proc convertCoords*(renderTexture: PRenderTexture; point: TVector2i; targetView: PView): TVector2f{.
   cdecl, importc: "sfRenderTexture_convertCoords", dynlib: LibG.}
 #Draw a drawable object to the render-target
-proc draw*(renderTexture: PRenderTexture; sprite: PSprite; states: PRenderStates){.
+proc draw*(renderTexture: PRenderTexture; sprite: PSprite; states: PRenderStates = nil){.
   cdecl, importc: "sfRenderTexture_drawSprite", dynlib: LibG.}
-proc draw*(renderTexture: PRenderTexture; text: PText; states: PRenderStates){.
+proc draw*(renderTexture: PRenderTexture; text: PText; states: PRenderStates = nil){.
   cdecl, importc: "sfRenderTexture_drawText", dynlib: LibG.}
-proc draw*(renderTexture: PRenderTexture; shape: PShape; states: PRenderStates){.
+proc draw*(renderTexture: PRenderTexture; shape: PShape; states: PRenderStates = nil){.
   cdecl, importc: "sfRenderTexture_drawShape", dynlib: LibG.}
 proc draw*(renderTexture: PRenderTexture; shape: PCircleShape; 
-            states: PRenderStates){.
+            states: PRenderStates = nil){.
   cdecl, importc: "sfRenderTexture_drawCircleShape", dynlib: LibG.}
 proc draw*(renderTexture: PRenderTexture; shape: PConvexShape; 
-            states: PRenderStates){.
+            states: PRenderStates = nil){.
   cdecl, importc: "sfRenderTexture_drawConvexShape", dynlib: LibG.}
 proc draw*(renderTexture: PRenderTexture; shape: PRectangleShape; 
-            states: PRenderStates){.
+            states: PRenderStates = nil){.
   cdecl, importc: "sfRenderTexture_drawRectangleShape", dynlib: LibG.}
 proc draw*(renderTexture: PRenderTexture; va: PVertexArray; 
-            states: PRenderStates){.
+            states: PRenderStates = nil){.
   cdecl, importc: "sfRenderTexture_drawVertexArray", dynlib: LibG.}
 #Draw primitives defined by an array of vertices to a render texture
 proc draw*(renderTexture: PRenderTexture; vertices: PVertex; vertexCount: cint; 
-            primitiveType: TPrimitiveType; states: PRenderStates){.
+            primitiveType: TPrimitiveType; states: PRenderStates = nil){.
   cdecl, importc: "sfRenderTexture_drawPrimitives", dynlib: LibG.}
 #Save the current OpenGL render states and matrices
 #/
@@ -768,7 +768,7 @@ proc setTextureRect*(sprite: PSprite, rectangle: TIntRect) {.
   cdecl, importc: "sfSprite_setTextureRect", dynlib: LibG.}
 proc setColor*(sprite: PSprite, color: TColor) {.
   cdecl, importc: "sfSprite_setColor", dynlib: LibG.}
-proc getTexture*(sprite: PSprite): TTexture {.
+proc getTexture*(sprite: PSprite): PTexture {.
   cdecl, importc: "sfSprite_getTexture", dynlib: LibG.}
 proc getTextureRect*(sprite: PSprite): TIntRect {.
   cdecl, importc: "sfSprite_getTextureRect", dynlib: LibG.}
@@ -1056,6 +1056,8 @@ proc `$` *(a: PView): string =
   return $a.getViewport()
 proc `$` *(a: TVector2f): string = 
   return "<TVector2f $1,$2>" % [$a.x, $a.y]
+proc `$` *(a: TVector2i): string =
+  return "<TVector2i $1,$2>" % [$a.x, $a.y]
 
 proc vec2i*(x, y: int): TVector2i =
   result.x = x.cint
