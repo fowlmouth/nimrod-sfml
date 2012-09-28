@@ -929,6 +929,71 @@ proc scaleWithCenter*(transform: PTransform, scaleX, scaleY, centerX, centerY: c
   cdecl, importc: "sfTransform_scaleWithCenter", dynlib: LibG.}
 let IdentityMatrix*: TTransform = transformFromMatrix(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
 
+proc newConvexShape*(): PConvexShape {.
+  cdecl, importc: "sfConvexShape_create", dynlib: LibG.}
+proc copy*(shape: PConvexShape): PConvexShape {.
+  cdecl, importc: "sfConvexShape_copy", dynlib: LibG.}
+proc destroy*(shape: PConvexShape) {.cdecl, importc: "sfConvexShape_destroy", 
+  dynlib: LibG.}
+proc getPosition*(shape: PConvexShape): TVector2f {.cdecl, 
+  importc: "sfConvexShape_getPosition", dynlib: LibG.} 
+proc setPosition*(shape: PConvexShape; position: TVector2f) {.cdecl, 
+  importc: "sfConvexShape_setPosition", dynLib: LibG.}
+proc getRotation*(shape: PConvexShape): cfloat {.cdecl,
+  importc: "sfConvexShape_getRotation", dynlib: LibG.}
+proc setRotation*(shape: PConvexShape; degrees: cfloat) {.cdecl,   
+  importc: "sfConvexShape_setRotation", dynlib: LibG.}
+proc getScale*(shape: PConvexShape): TVector2f {.cdecl,  
+  importc: "sfConvexShape_getScale", dynlib: LibG.}
+proc setScale*(shape: PConvexShape; scale: TVector2f) {.cdecl,  
+  importc: "sfConvexShape_setScale", dynlib: LibG.}
+proc getOrigin*(shape: PConvexShape): TVector2f {.cdecl,  
+  importc: "sfConvexShape_getOrigin", dynlib: LibG.}
+proc setOrigin*(shape: PConvexShape; origin: TVector2f) {.cdecl,  
+  importc: "sfConvexShape_setOrigin", dynlib: LibG.}
+proc move*(shape: PConvexShape; offset: TVector2f) {.cdecl, dynLib: LibG, 
+  importc: "sfConvexShape_move".}
+proc rotate*(shape: PConvexShape; degrees: cfloat) {.cdecl, dynLib: LibG, 
+  importc: "sfConvexShape_rotate".}
+proc scale*(shape: PConvexShape; factor: TVector2f) {.cdecl, dynLib: LibG,
+  importc: "sfConvexShape_scale".}
+proc getTransform*(shape: PConvexShape): TTransform {.cdecl,
+  importc: "sfConvexShape_getTransform", dynlib: LibG.}
+proc getInverseTransform*(shape: PConvexShape): TTransform {.cdecl,
+  importc: "sfConvexShape_getInverseTransform", dynlib: LibG.}
+proc getTexture*(shape: PConvexShape): PTexture {.cdecl, 
+  importc: "sfConvexShape_getTexture".}
+proc setTexture*(shape: PConvexShape; texture: PTexture; resetRect = true) {.
+  cdecl, importc: "sfConvexShape_setTexture", dynlib: LibG.}
+proc getTextureRect*(shape: PConvexShape): TIntRect {.cdecl, dynlib: LibG,
+  importc: "sfConvexShape_getTextureRect".}
+proc setTextureRect*(shape: PConvexShape; rect: TIntRect) {.cdecl, dynlib: LibG,
+  importc: "sfConvexShape_setTextureRect".}
+proc getFillColor*(shape: PConvexShape): TColor {.cdecl, dynLib: LibG,
+  importc: "sfConvexShape_getFillColor".} 
+proc setFillColor*(shape: PConvexShape; color: TColor) {.cdecl, dynlib: LibG,
+  importc: "sfConvexShape_setFillColor".}
+proc getOutlineColor*(shape: PConvexShape): TColor {.cdecl, dynlib: LibG,
+  importc: "sfConvexShape_getOutlineColor".}
+proc setOutlineColor*(shape: PConvexShape; color: TColor) {.cdecl, dynlib: LibG,
+  importc: "sfConvexShape_setOutlineColor".}
+proc getOutlineThickness*(shape: PConvexShape): cfloat {.cdecl,
+  importc: "sfConvexShape_getOutlineThickness", dynlib: LibG.}
+proc setOutlineThickness*(shape: PConvexShape; thickness: cfloat) {.cdecl,
+  importc: "sfConvexShape_setOutlineThickness", dynlib: LibG.}
+proc getPointCount*(shape: PConvexShape): cuint {.cdecl,
+  importc: "sfConvexShape_getPointCount", dynlib: LibG.}
+proc setPointCount*(shape: PConvexShape; count: cuint) {.cdecl,
+  importc: "sfConvexShape_setPointCount", dynlib: LibG.}
+proc getPoint*(shape: PConvexShape; index: cuint): TVector2f {.cdecl, 
+  importc: "sfConvexShape_getPoint", dynlib: LibG.}
+proc setPoint*(shape: PConvexShape; index: cuint; point: TVector2f) {.cdecl, 
+  importc: "sfConvexShape_setPoint", dynlib: LibG.}
+proc getLocalBounds*(shape: PConvexShape): TFloatRect {.cdecl, 
+  importc: "sfConvexShape_getLocalBounds", dynlib: LibG.}
+proc getGlobalBounds*(shape: PConvexShape): TFloatRect {.cdecl,
+  importc: "sfConvexShape_getGlobalBounds", dynlib: LibG.}
+
 
 proc newShader*(VSfilename: cstring, fragmentShaderFilename: cstring): PShader {.
   cdecl, importc: "sfShader_createFromFile", dynlib: LibG.}
@@ -1024,6 +1089,9 @@ proc newCircleShape*(radius: cfloat; pointCount: cint = 30): PCircleShape =
   result = newCircleShape()
   result.setRadius radius
   result.setPointCount pointCount
+proc newConvexShape*(pointCount: int): PConvexShape =
+  result = newConvexShape()
+  result.setPointCount pointCount.cuint
 proc newRectangleShape*(size: TVector2f): PRectangleShape =
   result = newRectangleShape()
   result.setSize size
@@ -1055,9 +1123,9 @@ proc `$` *(a: TFloatRect): string =
 proc `$` *(a: PView): string = 
   return $a.getViewport()
 proc `$` *(a: TVector2f): string = 
-  return "<TVector2f $1,$2>" % [$a.x, $a.y]
+  return "($1,$2)" % [$a.x, $a.y]
 proc `$` *(a: TVector2i): string =
-  return "<TVector2i $1,$2>" % [$a.x, $a.y]
+  return "($1,$2)" % [$a.x, $a.y]
 
 proc vec2i*(x, y: int): TVector2i =
   result.x = x.cint
