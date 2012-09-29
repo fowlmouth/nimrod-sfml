@@ -660,6 +660,71 @@ proc getLocalBounds*(shape: PRectangleShape): TFloatRect {.
 proc getGlobalBounds*(shape: PRectangleShape): TFloatRect {.
   cdecl, importc: "sfRectangleShape_getGlobalBounds", dynlib: LibG.}
 
+type
+  TGetPointCountCallback* = proc(userData: pointer): cint {.cdecl.}
+  TGetPointCallback* = proc(a: cint; userData: pointer): TVector2f {.cdecl.}
+  
+{.push: cdecl.}
+proc newShape*(getPointCount: TGetPointCountCallback; 
+        getPoint: TGetPointCallback; userdata: pointer = nil): PShape {.
+  importc: "sfShape_create", dynLib: LibG.}
+proc destroy*(shape: PShape) {.importc: "sfShape_destroy", dynLib: LibG.}
+proc setPosition*(shape: PShape; pos: TVector2f) {.
+  importc: "sfShape_setPosition", dynlib: LibG.}
+proc getPosition*(shape: PShape): TVector2f {.
+  importc: "sfShape_getPosition", dynlib: LibG.}
+proc setRotation*(shape: PShape; degrees: cfloat) {.
+  importc: "sfShape_setRotation", dynlib: LibG.}
+proc getRotation*(shape: PShape): cfloat {.
+  importc: "sfShape_getRotation", dynlib: LibG.}
+proc setScale*(shape: PShape; scale: TVector2f) {.
+  importc: "sfShape_setScale", dynlib: LibG.}
+proc getScale*(shape: PShape): TVector2f {.
+  importc: "sfShape_getScale", dynlib: LibG.}
+proc setOrigin*(shape: PShape; origin: TVector2f) {.
+  importc: "sfShape_setOrigin", dynlib: LibG.}
+proc getOrigin*(shape: PShape): TVector2f {.
+  importc: "sfShape_getOrigin", dynlib: LibG.}
+proc move*(shape: PShape; offset: TVector2f) {.
+  importc: "sfShape_move", dynlib: LibG.}
+proc rotate*(shape: PShape; degrees: cfloat) {.
+  importc: "sfShape_rotate", dynlib: LibG.}
+proc scale*(shape: PShape; factor: TVector2f) {.
+  importc: "sfShape_scale", dynlib: LibG.}
+proc getTransform*(shape: PShape): TTransform {.
+  importc: "sfShape_getTransform", dynlib: LibG.}
+proc getInverseTransform*(shape: PShape): TTransform {.
+  importc: "sfShape_getInverseTransform", dynlib: LibG.}
+proc setTexture*(shape: PShape; texture: PTexture; resetRect = true) {.
+  importc: "sfShape_setTexture", dynlib: LibG.}
+proc getTexture*(shape: PShape): PTexture {.
+  importc: "sfShape_getTexture", dynlib: LibG.}
+proc setTextureRect*(shape: PShape; rect: TIntRect) {.
+  importc: "sfShape_setTextureRect", dynlib: LibG.}
+proc getTextureRect*(shape: PShape): TIntRect {.
+  importc: "sfShape_getTextureRect", dynlib: LibG.}
+proc setFillColor*(shape: PShape; color: TColor) {.
+  importc: "sfShape_setFillColor", dynlib: LibG.}
+proc getFillColor*(shape: PShape): TColor {.
+  importc: "sfShape_getFillColor", dynlib: LibG.}
+proc getOutlineColor*(shape: PShape; color: TColor) {.
+  importc: "sfShape_getOutlineColor", dynlib: LibG.}
+proc setOutlineColor*(shape: PShape): TColor {.
+  importc: "sfShape_setOutlineColor", dynlib: LibG.}
+proc setOutlineThickness*(shape: PShape; thickness: cfloat) {.
+  importc: "sfShape_setOutlineThickness", dynlib: LibG.}
+proc getOutlineThickness*(shape: PShape): cfloat {.
+  importc: "sfShape_getOutlineThickness", dynlib: LibG.}
+proc getPointCount*(shape: PShape): cuint {.
+  importc: "sfShape_getPointCount", dynlib: LibG.}
+proc getPoint*(shape: PShape; index: cuint): TVector2f {.
+  importc: "sfShape_getPoint", dynlib: LibG.}
+proc getLocalBounds*(shape: PShape): TFloatRect {.
+  importc: "sfShape_getLocalBounds", dynlib: LibG.}
+proc getGlobalBounds*(shape: PShape): TFloatRect {.
+  importc: "sfShape_getGlobalBounds", dynlib: LibG.}
+proc update*(shape: PShape) {.importc: "sfShape_update", dynlib: LibG.}
+{.pop: cdecl.} 
 
 proc newView*(): PView {.
   cdecl, importc: "sfView_create", dynlib: LibG.}
