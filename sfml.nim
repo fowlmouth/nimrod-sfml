@@ -1095,14 +1095,14 @@ proc unbindGL*(shader: PShader) {.
 proc shaderIsAvailable*(): bool {.
   cdecl, importc: "sfShader_isAvailable", dynlib: LibG.}
 
-proc color*(red, green, blue: cchar): TColor {.
+proc color*(red, green, blue: uint8): TColor {.
   cdecl, importc: "sfColor_fromRGB", dynlib: LibG.}
 proc color*(red, green, blue: int): TColor {.inline.} =
-  return color(red.cchar, green.cchar, blue.cchar)
-proc color*(red, green, blue, alpha: cchar): TColor {.
+  return color(red.uint8, green.uint8, blue.uint8)
+proc color*(red, green, blue, alpha: uint8): TColor {.
   cdecl, importc: "sfColor_fromRGBA", dynlib: LibG.}
 proc color*(red, green, blue, alpha: int): TColor {.inline.} =
-  return color(red.cchar, green.cchar, blue.cchar, alpha.cchar)
+  return color(red.uint8, green.uint8, blue.uint8, alpha.uint8)
 proc `+`*(color1, color2: TColor): TColor {.
   cdecl, importc: "sfColor_add", dynlib: LibG.}
 proc `*`*(color1, color2: TColor): TColor {.
