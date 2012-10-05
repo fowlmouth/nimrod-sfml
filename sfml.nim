@@ -497,14 +497,23 @@ proc floatRect*(left, top, width, height: cfloat): TFloatRect =
   result.top    = top 
   result.width  = width
   result.height = height
+
+{.push: cdecl.}
 proc contains*(rect: PFloatRect, x, y: cfloat): bool {.
-  cdecl, importc: "sfFloatRect_contains", dynlib: LibG.}
-proc contains*(rect: PIntRect, x: cint, y: cint): bool{.cdecl, 
+  importc: "sfFloatRect_contains", dynlib: LibG.}
+proc contains*(rect: var TFloatRect, x, y: cfloat): bool {.
+  importc: "sfFloatRect_contains", dynlib: LibG.}
+proc contains*(rect: PIntRect, x: cint, y: cint): bool{.
   importc: "sfIntRect_contains", dynlib: LibG.}
+proc contains*(rect: var TIntRect, x: cint, y: cint): bool{.
+  importc: "sfIntRect_contains", dynlib: LibG.}
+proc contains*(rect: var TFloatRect; x, y: cint): bool {.inline.} =
+  return contains(rect, x.cfloat, y.cfloat)
 proc intersects*(rect1, rect2, intersection: PFloatRect): bool {.
-  cdecl, importc: "sfFloatRect_intersects", dynlib: LibG.}
+  importc: "sfFloatRect_intersects", dynlib: LibG.}
 proc intersects*(rect1, rect2, intersection: PIntRect): bool {.
-  cdecl, importc: "sfIntRect_intersects", dynlib: LibG.}
+  importc: "sfIntRect_intersects", dynlib: LibG.}
+{.pop.}
 
 proc newFont*(filename: cstring): PFont {.
   cdecl, importc: "sfFont_createFromFile", dynlib: LibG.}
@@ -1198,6 +1207,18 @@ proc vec2i*(x, y: int): TVector2i =
 proc vec2f*(x, y: float): TVector2f =
   result.x = x.cfloat
   result.y = y.cfloat
+proc vec2i*(x, y: float): TVector2i =
+  result.x = x.cint
+  result.y = y.cint
+proc vec2f*(x, y: int): TVector2f =
+  result.x = x.cfloat
+  result.y = y.cfloat
+proc vec2f*(a: TVector2i): TVector2f =
+  result.x = a.x.cfloat
+  result.y = a.y.cfloat
+proc vec2i*(a: TVector2f): TVector2i =
+  result.x = a.x.cint
+  result.y = a.y.cint
 
 proc `+`*(a, b: TVector2f): TVector2f {.inline.} =
   result.x = a.x + b.x
@@ -1208,12 +1229,19 @@ proc `-`*(a: TVector2f): TVector2f {.inline.} =
 proc `-`*(a, b: TVector2f): TVector2f {.inline.}=
   result.x = a.x - b.x
   result.y = a.y - b.y
+proc `-`*(a, b: TVector2i): TVector2i {.inline.} =
+  result.x = a.x - b.x
+  result.y = a.y - b.y
 proc `*`*(a: TVector2f, b: cfloat): TVector2f {.inline.} =
   result.x = a.x * b
   result.y = a.y * b
 proc `*`*(a, b: TVector2f): TVector2f {.inline.} =
   result.x = a.x * b.x
   result.y = a.y * b.y
+proc `*`*(a: TVector2i; b: TVector2f): TVector2f {.inline.} =
+  result.x = a.x.cfloat * b.x
+  result.y = a.y.cfloat * b.y
+
 proc `/`*(a: TVector2f, b: cfloat): TVector2f {.inline.} =
   result.x = a.x / b
   result.y = a.y / b
