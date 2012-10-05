@@ -31,14 +31,15 @@ classimpl ParticleDef, PParticleDef:
   proc free*() =
     self.sprite.destroy()
   
-  proc init(self: var PParticleDef; sprite: PSprite; lifetime: float) =
+  proc init(self: var PParticleDef; sprite: PSprite; lifetime: float;
+       velocity: float) =
     self.sprite = sprite
     self.lifetime = lifetime
-    self.velocity = 1.40
+    self.velocity = velocity
   
   proc copy*(): PParticleDef =
     new(result, free)
-    init(result, self.sprite, self.lifetime)
+    init(result, self.sprite, self.lifetime, self.velocity)
   proc newParticleDef*(fn: string; lifetime = 1.0): PParticleDef =
     new(result, free)
     var img = newImage(fn)
@@ -46,7 +47,7 @@ classimpl ParticleDef, PParticleDef:
     var sprite = newSprite()
     img.destroy()
     sprite.setTexture tex, true
-    init(result, sprite, lifetime)
+    init(result, sprite, lifetime, 1.4)
   
 
 proc floor(a: TVector2f): TVector2f =
@@ -153,6 +154,11 @@ classimpl ParticleSystem, PParticleSystem:
     result.sprite = p.sprite.copy()
     
 
+proc last*[A](s: seq[A]): A =
+  return s[high(s)]
+proc `last=`*[A](s: seq[A]; val: A) =
+  s[high(s)] = val
+
 when isMainModule:
   const
     ScreenW = 800
@@ -162,20 +168,31 @@ when isMainModule:
     window = newRenderWindow(videoMode(screenW, ScreenH, 32), "noise", sfDefaultStyle)
     event: TEvent
     pdef = newParticleDef("pixel.png", 7.688558)
-    ps = newParticleSystem(pdef)
     clock = newClock()
     fuelRate = 350
     fueling = true
     view = window.getDefaultView.copy()
     guiFont = newFont("LiberationMono-Regular.ttf")
     debugText = newText("yo.", guiFont, 20)
+    pss: seq[PParticleSystem] = @[]
   
   pdef.velocity = 80.46
-  ps.set_position vec2f(screenw / 2, screenh / 2)
-  ps.set_scale vec2f(4.0, 4.0)
+  pss.add(newParticleSystem(pdef))
+  pss.last.set_position vec2f(screenw / 2, screenh / 2)
+  pss.last.set_scale vec2f(4.0, 4.0)
+  
+  pdef = pdef.copy()
+  pdef.color = Blue
+  pss.add(newParticleSystem(pdef))
+  pss.last.set_position vec2f(random(ScreenW), random(ScreenH))
+  
+  pdef = pdef.copy()
+  pdef.color = Red
+  pss.add(newParticleSystem(pdef))
+  pss.last.set_position vec2f(random(ScreenW), random(ScreenH))
+  
 
   window.set_framerate_limit 60
-  ps.fuel 400
 
   while window.isOpen:
     let dt = clock.restart.asMilliseconds() / 1000
@@ -197,14 +214,17 @@ when isMainModule:
         #echo event.kind
     
     if fueling:
-      ps.fuel(int(fuelRate.float * dt))
-      
-    ps.update dt
+      for i in pss:
+        i.fuel(int(fuelRate.float * dt))
+    
+    for i in pss:
+      i.update dt
     debugtext.setstring($(1.0 / dt) &"\n"& $fueling)
     window.clear Black
     window.setView view
     
-    window.draw ps
+    for i in pss:
+      window.draw i
     
     window.draw debugText
     
