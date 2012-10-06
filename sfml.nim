@@ -38,11 +38,11 @@ type
   TWindow* {.pf.} = object
   PContextSettings* = ptr TContextSettings
   TContextSettings*{.pf.} = object
-    depthBits: cint
-    stencilBits: cint
-    antialiasingLevel: cint
-    majorVersion: cint
-    minorVersion: cint
+    depthBits*: cint
+    stencilBits*: cint
+    antialiasingLevel*: cint
+    majorVersion*: cint
+    minorVersion*: cint
   TVideoMode* {.pf.} = object
     width*: cint
     height*: cint
