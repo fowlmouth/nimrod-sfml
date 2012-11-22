@@ -1,6 +1,6 @@
 ## You need classlib on your path 
 #https://gist.github.com/3815893
-import sfml, classlib, sfml_colors, os, math
+import csfml, classlib, csfml_colors, os, math
 randomize()
 
 import unsigned

@@ -20,7 +20,7 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
-import sfml, sfml_colors, strutils
+import csfml, csfml_colors, strutils
 type
   PJoystick = ref object
     axes: array[TJoystickAxis, AxisVisualRepresentation]
@@ -32,7 +32,7 @@ var
   messages: seq[PText] = @[]
   guiFont = newFont("LiberationMono-Regular.ttf")
   messagesVisible = 10
-  event: sfml.TEvent
+  event: csfml.TEvent
   joysticks: seq[PJoystick] = @[]
 
 window.setFramerateLimit 60
