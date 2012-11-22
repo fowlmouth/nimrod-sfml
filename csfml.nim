@@ -498,7 +498,7 @@ proc floatRect*(left, top, width, height: cfloat): TFloatRect =
   result.width  = width
   result.height = height
 
-{.push: cdecl.}
+{.push cdecl.}
 proc contains*(rect: PFloatRect, x, y: cfloat): bool {.
   importc: "sfFloatRect_contains", dynlib: LibG.}
 proc contains*(rect: var TFloatRect, x, y: cfloat): bool {.
@@ -673,7 +673,7 @@ type
   TGetPointCountCallback* = proc(userData: pointer): cint {.cdecl.}
   TGetPointCallback* = proc(a: cint; userData: pointer): TVector2f {.cdecl.}
   
-{.push: cdecl.}
+{.push cdecl.}
 proc newShape*(getPointCount: TGetPointCountCallback; 
         getPoint: TGetPointCallback; userdata: pointer = nil): PShape {.
   importc: "sfShape_create", dynLib: LibG.}

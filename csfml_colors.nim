@@ -1,4 +1,4 @@
-import sfml
+import csfml
 {.deadCodeElim: on.}
 let
   Black*: TColor = color(0, 0, 0)
