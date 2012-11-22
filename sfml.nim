@@ -1283,3 +1283,30 @@ proc perpendicular(a: TVector2f): TVector2f =
 proc cross(a, b: TVector2f): float =
   return a.x * b.y - a.y * b.x
 
+
+proc vec3f*(x, y, z: cfloat): TVector3f {.inline.} =
+  result.x = x
+  result.y = y
+  result.z = z
+
+proc `+` *(a: TVector3f; b: TVector3f):TVector3f {.inline.} =
+  result.x = a.x + b.x
+  result.y = a.y + b.y
+  result.z = a.z + b.z
+proc `-` *(a: TVector3f; b: TVector3f):TVector3f {.inline.} =
+  result.x = a.x - b.x
+  result.y = a.y - b.y
+  result.z = a.z - b.z
+proc `+=` *(a: var TVector3f; b: TVector3f) {.inline, noSideEffect.} =
+  a = a + b
+proc `-=` *(a: var TVector3f; b: TVector3f) {.inline, noSideEffect.} =
+  a = a - b
+
+proc length*(a: TVector3f): float =
+  result = sqrt(a.x * a.x + a.y * a.y + a.z * a.z)
+proc lengthSq*(a: TVector3f): float =
+  result = a.x * a.x + a.y * a.y + a.z * a.z
+proc distance*(a, b: TVector3f): float {.inline.} = 
+  result = (a - b).length()
+proc distanceSq*(a, b: TVector3f): float {.inline.} =
+  result = (a - b).lengthSq()
