@@ -22,16 +22,23 @@ proc `div`(a: TColor; b: uint8): TColor =
 proc `/`(a: TColor; b: uint8): TColor{.inline.} =
   return (a div b)
 
+proc random*(some: TSlice[float]): float = random(some.b - some.a) + some.a
+
 classimpl ParticleDef, PParticleDef:
-  var lifetime: float
   var velocity: float
   var sprite: PSprite
-  var color: TColor
+  var lifetime_r: TSlice[float]
+  #var color: TColor
   
   proc free*() =
     self.sprite.destroy()
   
-  proc init(self: var PParticleDef; sprite: PSprite; lifetime: float;
+  proc `lifetime=`*(val: float) =
+    self.lifetime_r.a = val
+    self.lifetime_r.b = val
+  proc `lifetime=`*(val: TSlice[float]) = self.lifetime_r = val
+  
+  proc init(self: var PParticleDef; sprite: PSprite; lifetime: TSlice[float];
        velocity: float) =
     self.sprite = sprite
     self.lifetime = lifetime
@@ -39,8 +46,8 @@ classimpl ParticleDef, PParticleDef:
   
   proc copy*(): PParticleDef =
     new(result, free)
-    init(result, self.sprite, self.lifetime, self.velocity)
-  proc newParticleDef*(fn: string; lifetime = 1.0): PParticleDef =
+    init(result, self.sprite.copy(), self.lifetime_r, self.velocity)
+  proc newParticleDef*(fn: string; lifetime = 5.2 .. 10.0): PParticleDef =
     new(result, free)
     var img = newImage(fn)
     var tex = newTexture(img)
@@ -48,6 +55,10 @@ classimpl ParticleDef, PParticleDef:
     img.destroy()
     sprite.setTexture tex, true
     init(result, sprite, lifetime, 1.4)
+  
+  proc `color=`*(color: TColor) =
+    self.sprite.setColor color
+  proc lifetime*(): float = random(self.lifetime_r)
   
 
 proc floor(a: TVector2f): TVector2f =
@@ -57,23 +68,28 @@ proc floor(a: TVector2f): TVector2f =
 classimpl Particle, PParticle:
   var position: TVector2f
   var velocity: TVector2f
-  var color: TColor
+  #var color: TColor
   var sprite: PSprite
   var lifetime: float = 1.0
   
   proc free() =
     self.sprite.destroy()
-    
-  proc newParticle*(pos, velocity: TVector2f; color: TColor; sprite: PSprite; 
+  
+  proc newParticle*(pdef: PParticleDef; pos: TVector2f): PParticle {.constructor.} =
+    new result, free
+    result.position = pos
+    let angle = (random(2048) / 2_048) * 360.0 * PI / 180.0
+    result.velocity.x = cos(angle) * pdef.velocity
+    result.velocity.y = sin(angle) * pdef.velocity
+    result.sprite = pdef.sprite.copy()
+    result.lifetime = pdef.lifetime
+  proc newParticle*(pos, velocity: TVector2f; sprite: PSprite; 
       lifetime: float): PParticle {.cdecl, constructor.} =
     new(result, free)
     result.position = pos
     result.velocity = velocity
     result.sprite = sprite
-    result.color = color
-    result.sprite.setColor color
     result.lifetime = lifetime
-    
   
   proc update*(dt: float): bool =
     self.lifetime -= dt
@@ -83,13 +99,11 @@ classimpl Particle, PParticle:
     self.sprite.setposition self.position.floor()
     #self.sprite.setcolor self.sprite.getColor.addAlpha(1)
 
-
-proc instanceAt*(self: PParticleDef; pos: TVector2f): PParticle =
-  let angle = (random(2048) / 2_048) * 360.0 * PI / 180.0
-  result = newParticle(
-    pos, vec2f(cos(angle), sin(angle)) * self.velocity, 
-    Green, self.sprite.copy(),
-    self.lifetime)
+when false:
+  proc instanceAt*(self: PParticleDef; pos: TVector2f): PParticle =
+    result = newParticle(
+      pos, vec2f(cos(angle), sin(angle)) * self.velocity, self.sprite.copy(),
+      self.lifetime)
 
 classimpl ParticleSystem, PParticleSystem:
   var
@@ -124,7 +138,7 @@ classimpl ParticleSystem, PParticleSystem:
         inc i
   proc fuel*(particles: int) =
     for i in 0..particles:
-      self.particles.add(self.pDef.instanceAT(self.position))
+      self.particles.add(newParticle(self.pdef, self.position)) #self.pDef.instanceAT(self.position))
   
   proc draw*(window: PRenderWindow; self: PParticleSystem) =
     for p in self.particles:
@@ -163,11 +177,13 @@ when isMainModule:
   const
     ScreenW = 800
     ScreenH = 600
+  let
+    colors = [Red, Green, Blue]
 
   var 
     window = newRenderWindow(videoMode(screenW, ScreenH, 32), "noise", sfDefaultStyle)
     event: TEvent
-    pdef = newParticleDef("pixel.png", 7.688558)
+    pdef = newParticleDef("pixel.png", 0.688558 .. 9.373748)
     clock = newClock()
     fuelRate = 350
     fueling = true
@@ -201,8 +217,21 @@ when isMainModule:
       of evtclosed:
         window.close()
       of evtkeypressed:
-        if event.key.code == keySpace:
+        case event.key.code
+        of keySpace:
           fueling = not fueling
+        of keyUp:
+          var p = pdef.copy()
+          p.color = colors[random(colors.len)]
+          pss.add(newParticleSystem(p))
+          pss.last.set_position vec2f(random(ScreenW), random(ScreenH))
+        of keyDown:
+          if pss.len > 0:
+            pss.delete random(len(pss))
+        of keyG:
+          Gc_fullcollect()
+        else:
+          nil
       of evtmousewheelmoved:
         case event.mouseWheel.delta
         of 1: ## UP

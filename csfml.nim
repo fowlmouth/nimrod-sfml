@@ -855,7 +855,7 @@ proc getGlobalBounds*(sprite: PSprite): TFloatRect {.
 
 proc newTexture*(width, height: cint): PTexture {.
   cdecl, importc: "sfTexture_create", dynlib: LibG.}
-proc newTexture*(filename: cstring): PTexture {.
+proc newTexture*(filename: cstring, area: PIntRect): PTexture {.
   cdecl, importc: "sfTexture_createFromFile", dynlib: LibG.}
 proc newTexture*(data: pointer, size: cint, area: PIntRect): PTexture {.
   cdecl, importc: "sfTexture_createFromMemory", dynlib: LibG.}
