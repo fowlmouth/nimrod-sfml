@@ -1,0 +1,6 @@
+[Package]
+name        = "sfml"
+version     = "2.0-live"
+author      = "fowl"
+description = "High level OpenGL-based Game Library"
+license     = "MIT"
