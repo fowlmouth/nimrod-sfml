@@ -357,8 +357,17 @@ proc getDefaultView*(window: PRenderWindow): PView {.
 proc getViewport*(window: PRenderWindow, view: PView): TIntRect {.
   cdecl, importc: "sfRenderWindow_getViewport", dynlib: LibG.}
 
-proc convertCoords*(window: PRenderWindow, point: TVector2i, targetView: PView): TVector2f {.
-  cdecl, importc: "sfRenderWindow_convertCoords", dynlib: LibG.}
+when false: ## 2.0RC!
+  proc convertCoords*(window: PRenderWindow, point: TVector2i, targetView: PView): TVector2f {.
+    cdecl, importc: "sfRenderWindow_convertCoords", dynlib: LibG.}
+else:
+  proc mapPixelToCoords*(window: PRenderWindow; point: TVector2i; view: PView): TVector2f {.cdecl, importc: "sfRenderWindow_mapPixelToCoords", dynlib: LibG.}
+  proc mapCoordsToPixel*(window: PRenderWindow; point: TVector2f; view: PView): TVector2i {.cdecl, importc: "sfRenderWindow_mapCoordsToPixel", dynlib: LibG.}
+
+
+  proc convertCoords*(window: PRenderWindow; point: TVector2i; view: PView): TVector2f {.inline.} = mapPixelToCoords(window, point, view)
+
+
 
 proc draw*(window: PRenderWindow, sprite: PSprite, states: PRenderStates = nil) {.
   cdecl, importc: "sfRenderWindow_drawSprite", dynlib: LibG.}
