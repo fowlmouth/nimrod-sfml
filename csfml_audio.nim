@@ -203,7 +203,7 @@ proc setAttenuation*(sound: PSound; attenuation: cfloat){.
 #/
 #/ The playing position can be changed when the sound is
 #/ either paused or playing.
-proc setPlayingOffset*(sound: PSound; timeOffset: sfml.TTime){.
+proc setPlayingOffset*(sound: PSound; timeOffset: csfml.TTime){.
   cdecl, importc: "sfSound_setPlayingOffset", dynlib: Lib.}
 #//////////////////////////////////////////////////////////
 #/ \brief Get the pitch of a sound
