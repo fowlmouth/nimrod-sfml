@@ -1153,6 +1153,14 @@ proc milliseconds*(ms: int32): TTime {.
 proc microseconds*(us: int64): TTime {.
   cdecl, importc: "sfMicroseconds", dynlib: LibS.}
 
+proc `-`*(a, b: csfml.TTime): csfml.TTime {.inline.} = microseconds(a.asMicroseconds - b.asMicroseconds)
+proc `-=`*(a: var csfml.TTime; b: csfml.TTime) {.inline.} = a = a - b
+proc `+`*(a, b: csfml.TTime): csfml.TTime {.inline.} = microseconds(a.asMicroseconds + b.asMicroseconds)
+proc `+=`*(a: var csfml.TTime; b: csfml.TTime) {.inline.} = a = a + b
+proc `<`*(a, b: csfml.TTime): bool {.inline.} = a.asMicroseconds < b.asMicroseconds
+let ZeroTime* = microseconds(0)
+
+
 proc newContextSettings*(depthBits: cint = 0,
                          stencilBits: cint = 0,
                          antialiasingLevel: cint = 0,
