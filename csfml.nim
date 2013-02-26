@@ -267,12 +267,17 @@ proc getDesktopMode*(): TVideoMode {.
 proc isKeyPressed*(key: TKeyCode): bool {.
   cdecl, importc: "sfKeyboard_isKeyPressed", dynlib: LibW.}
 
+{.push callconv:cdecl.}
 proc mouseIsButtonPressed*(button: TMouseButton): bool {.
   cdecl, importc: "sfMouse_isButtonPressed", dynlib: LibW.}
 proc mouseGetPosition*(relativeTo: PWindow): TVector2i {.
   cdecl, importc: "sfMouse_getPosition", dynlib: LibW.}
 proc mouseSetPosition*(position: TVector2i, relativeTo: PWindow) {.
   cdecl, importc: "sfMouse_setPosition", dynlib: LibW.}
+{.pop.}
+proc getMousePosition*(relativeTo: PWindow): TVector2i {.inline.} = mouseGetPosition(relativeTo)
+proc setMousePosition*(pos: TVector2i; relativeTo: PWindow){.inline.}=mouseSetPosition(pos, relativeTo)
+
 
 proc joystickIsConnected*(joystick: cint): bool {.
   cdecl, importc: "sfJoystick_isConnected", dynlib: LibW.}
@@ -396,6 +401,14 @@ proc resetGlStates*(window: PRenderWindow) {.
   cdecl, importc: "sfRenderWindow_resetGLStates", dynlib: LibG.}
 proc capture*(window: PRenderWindow): PImage {.
   cdecl, importc: "sfRenderWindow_capture", dynlib: LibG.}
+
+## 2.0 GIT FINALLY ADDED THESE (not in 2.0 RC)
+{.push callConv:cdecl.}
+proc getMousePosition*(window: PRenderWindow): TVector2i {.
+  importc: "sfMouse_getPositionRenderWindow", dynlib: LibG.}
+proc setMousePosition*(pos: TVector2i, window: PRenderWindow) {.
+  importc: "sfMouse_setPositionRenderWindow", dynlib: LibG.}
+{.pop.}
 
 #Construct a new render texture
 proc newRenderTexture*(width, height: cint; depthBuffer: Bool): PRenderTexture {.
@@ -1218,7 +1231,7 @@ proc `$` *(a: TVector2f): string =
 proc `$` *(a: TVector2i): string =
   return "($1,$2)" % [$a.x, $a.y]
 
-proc vec2i*(x, y: int): TVector2i =
+proc vec2i*[A: TNumber](x, y: A): TVector2i =
   result.x = x.cint
   result.y = y.cint
 proc vec2f*(x, y: float): TVector2f =
