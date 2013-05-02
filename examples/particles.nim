@@ -1,6 +1,7 @@
 ## You need classlib on your path 
 #https://gist.github.com/3815893
-import csfml, classlib, csfml_colors, os, math
+import csfml, csfml_colors, os, math
+import fowltek/classlib
 randomize()
 
 import unsigned
