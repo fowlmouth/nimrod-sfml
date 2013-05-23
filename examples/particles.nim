@@ -175,6 +175,7 @@ proc `last=`*[A](s: seq[A]; val: A) =
   s[high(s)] = val
 
 when isMainModule:
+  import strutils
   const
     ScreenW = 800
     ScreenH = 600
@@ -191,7 +192,13 @@ when isMainModule:
     view = window.getDefaultView.copy()
     guiFont = newFont("LiberationMono-Regular.ttf")
     debugText = newText("yo.", guiFont, 20)
+    fuelRateText = newText("", guiFont, 20)
     pss: seq[PParticleSystem] = @[]
+  
+  block:
+    var p = debugText.getPosition
+    p.y += 20
+    fuelRateText.setPosition p 
   
   pdef.velocity = 80.46
   pss.add(newParticleSystem(pdef))
@@ -229,6 +236,10 @@ when isMainModule:
         of keyDown:
           if pss.len > 0:
             pss.delete random(len(pss))
+        of keyLeft:
+          dec fuelRate, 30
+        of KeyRight:
+          inc fuelRate, 30
         of keyG:
           Gc_fullcollect()
         else:
@@ -249,7 +260,10 @@ when isMainModule:
     
     for i in pss:
       i.update dt
-    debugtext.setstring($(1.0 / dt) &"\n"& $fueling)
+    
+    debugtext.setstring($formatFloat(1.0 / dt, ffDecimal, 1) & "fps")
+    fuelRateText.setString("Fuel rate: "& $fuelRate & "particles per second (for each system)")
+    
     window.clear Black
     window.setView view
     
@@ -257,5 +271,6 @@ when isMainModule:
       window.draw i
     
     window.draw debugText
+    window.draw fuelRateText
     
     window.display
