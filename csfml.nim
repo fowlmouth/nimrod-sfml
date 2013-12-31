@@ -2,9 +2,9 @@ import
   strutils, math
 when defined(linux):
   const
-    LibG = "libcsfml-graphics.so.2.0"
-    LibS = "libcsfml-system.so.2.0"
-    LibW = "libcsfml-window.so.2.0"
+    LibG = "libcsfml-graphics.so.2.(1|0)"
+    LibS = "libcsfml-system.so.2.(1|0)"
+    LibW = "libcsfml-window.so.2.(1|0)"
 else:
   {.error: "Platform unsupported".}
 {.deadCodeElim: on.}
@@ -250,8 +250,12 @@ type
     Quads
 
 
+
+{.push callconv: cdecl.}
+
+
 proc newWindow*(mode: TVideoMode, title: cstring, style: uint32, settings: PContextSettings = nil): PWindow {.
-  cdecl, importc: "sfWindow_create", dynlib: LibW.}
+  importc: "sfWindow_create", dynlib: LibW.}
 
 proc close*(window: PWindow) {.
   cdecl, importc: "sfWindow_close", dynlib: LibW.}
@@ -268,42 +272,40 @@ proc isKeyPressed*(key: TKeyCode): bool {.
   cdecl, importc: "sfKeyboard_isKeyPressed", dynlib: LibW.}
 
 {.push callconv:cdecl.}
-proc mouseIsButtonPressed*(button: TMouseButton): bool {.
-  cdecl, importc: "sfMouse_isButtonPressed", dynlib: LibW.}
-proc mouseGetPosition*(relativeTo: PWindow): TVector2i {.
-  cdecl, importc: "sfMouse_getPosition", dynlib: LibW.}
-proc mouseSetPosition*(position: TVector2i, relativeTo: PWindow) {.
-  cdecl, importc: "sfMouse_setPosition", dynlib: LibW.}
+
+{.push importc: "sf$1".}
+{.push dynlib: LibW.}
+
+proc Mouse_isButtonPressed*(button: TMouseButton): bool #{.cdecl, importc: "sfMouse_isButtonPressed", dynlib: LibW.}
+proc Mouse_getPosition*(relativeTo: PWindow): TVector2i #{.cdecl, importc: "sfMouse_getPosition", dynlib: LibW.}
+proc Mouse_setPosition*(position: TVector2i, relativeTo: PWindow) #{.cdecl, importc: "sfMouse_setPosition", dynlib: LibW.}
+
+
+
+proc Joystick_isConnected*(joystick: cint): bool#{.  cdecl, importc: "sfJoystick_isConnected", dynlib: LibW.}
+proc Joystick_getButtonCount*(joystick: cint): cint #{.  cdecl, importc: "sfJoystick_getButtonCount", dynlib: LibW.}
+proc Joystick_hasAxis*(joystick: cint, axis: TJoystickAxis): bool #{.  cdecl, importc: "sfJoystick_hasAxis", dynlib: LibW.}
+proc Joystick_isButtonPressed*(joystick: cint, button: cint): bool #{.  cdecl, importc: "sfJoystick_isButtonPressed", dynlib: LibW.}
+proc Joystick_getAxisPosition*(joystick: cint, axis: TJoystickAxis): float #{.  cdecl, importc: "sfJoystick_getAxisPosition", dynlib: LibW.}
+proc Joystick_update*(): void #.  cdecl, importc: "sfJoystick_update", dynlib: LibW.}
+
 {.pop.}
-proc getMousePosition*(relativeTo: PWindow): TVector2i {.inline.} = mouseGetPosition(relativeTo)
-proc setMousePosition*(pos: TVector2i; relativeTo: PWindow){.inline.}=mouseSetPosition(pos, relativeTo)
+{.pop.}
 
+{.push dynlib: LibG.}
+{.push importc: "sf$1".}
 
-proc joystickIsConnected*(joystick: cint): bool {.
-  cdecl, importc: "sfJoystick_isConnected", dynlib: LibW.}
-proc joystickGetButtonCount*(joystick: cint): cint {.
-  cdecl, importc: "sfJoystick_getButtonCount", dynlib: LibW.}
-proc joystickHasAxis*(joystick: cint, axis: TJoystickAxis): bool {.
-  cdecl, importc: "sfJoystick_hasAxis", dynlib: LibW.}
-proc joystickIsButtonPressed*(joystick: cint, button: cint): bool {.
-  cdecl, importc: "sfJoystick_isButtonPressed", dynlib: LibW.}
-proc joystickGetAxisPosition*(joystick: cint, axis: TJoystickAxis): float {.
-  cdecl, importc: "sfJoystick_getAxisPosition", dynlib: LibW.}
-proc joystickUpdate*(): void {.
-  cdecl, importc: "sfJoystick_update", dynlib: LibW.}
+proc RenderWindow_createFromHandle* (handle: TWindowHandle; settings: PContextSettings=nil): PRenderWindow
+proc RenderWindow_create*(mode: TVideoMode, title: cstring, style: int32, settings: PContextSettings = nil): PRenderWindow 
 
+{.pop.}
+#{.push importc: "sfRenderWindow_$1".}
 
-proc newRenderWindow*(handle: TWindowHandle, settings: PContextSettings = nil): PRenderWindow{.
-  cdecl, importc: "sfRenderWindow_createFromHandle", dynlib: LibG.}
-proc newRenderWindow*(mode: TVideoMode, title: cstring, style: int32, settings: PContextSettings = nil): PRenderWindow {.
-  cdecl, importc: "sfRenderWindow_create", dynlib: LibG.}
+proc sf (s:string): string {.compiletime.} = "sf" & s & "_$1"
 
-proc destroy*(window: PRenderWindow) {.
-  cdecl, importc: "sfRenderWindow_destroy", dynlib: LibG.}
-proc close*(window: PRenderWindow) {.
-  cdecl, importc: "sfRenderWindow_close", dynlib: LibG.}
-proc isOpen*(window: PRenderWindow): bool {.
-  cdecl, importc: "sfRenderWindow_isOpen", dynlib: LibG.}
+proc destroy*(window: PRenderWindow) {.importc: sf"RenderWindow".}
+proc close*(window: PRenderWindow)   {.importc: sf"RenderWindow".} 
+proc isOpen*(window: PRenderWindow): bool {.importc: sf"RenderWindow".}
 
 #void sfRenderWindow_setIcon(sfRenderWindow* renderWindow, unsigned int width, unsigned int height, const sfUint8* pixels);
 #proc setIcon*(window: PRenderWindow, width, height: cint, pixels: seq[uint8]) {.
@@ -696,6 +698,8 @@ type
   TGetPointCallback* = proc(a: cint; userData: pointer): TVector2f {.cdecl.}
   
 {.push cdecl.}
+{.push importc: sf"Shape".}
+
 proc newShape*(getPointCount: TGetPointCountCallback; 
         getPoint: TGetPointCallback; userdata: pointer = nil): PShape {.
   importc: "sfShape_create", dynLib: LibG.}
@@ -1143,28 +1147,30 @@ proc newColor*(r,g,b: int): TColor {.inline.} =
 proc newColor*(r,g,b,a: int): TColor {.inline.} = 
   return color(r,g,b,a)
 
-proc newClock*(): PClock {.
-  cdecl, importc: "sfClock_create", dynlib: LibS.}
-proc copy*(clocK: PClock): PClock {.
-  cdecl, importc: "sfClock_copy", dynlib: LibS.}
-proc destroy*(clock: PClock): PClock {.
-  cdecl, importc: "sfClock_destroy", dynlib: LibS.}
-proc getElapsedTime*(clock: PClock): TTime {.
-  cdecl, importc: "sfClock_getElapsedTime", dynlib: LibS.}
-proc restart*(clock: PClock): TTime {.
-  cdecl, importc: "sfClock_restart", dynlib: LibS, discardable.}
-proc asSeconds*(time: TTime): cfloat {.
-  cdecl, importc: "sfTime_asSeconds", dynlib: LibS.}
-proc asMilliseconds*(time: TTime): int32 {.
-  cdecl, importc: "sfTime_asMilliseconds", dynlib: LibS.}
-proc asMicroseconds*(time: TTime): int64 {.
-  cdecl, importc: "sfTime_asMicroseconds", dynlib: LibS.}
-proc seconds*(seconds: cfloat): TTime {.
-  cdecl, importc: "sfSeconds", dynlib: LibS.}
-proc milliseconds*(ms: int32): TTime {.
-  cdecl, importc: "sfMilliseconds", dynlib: LibS.}
-proc microseconds*(us: int64): TTime {.
-  cdecl, importc: "sfMicroseconds", dynlib: LibS.}
+{.push dynlib: LibS.}
+proc Clock_create* (): PClock {.importc: "sf$1".}
+{.push importc: "sfClock_$1".}
+proc copy*(clocK: PClock): PClock #{.  cdecl, importc: "sfClock_copy", dynlib: LibS.}
+proc destroy*(clock: PClock): PClock #{.  cdecl, importc: "sfClock_destroy", dynlib: LibS.}
+proc getElapsedTime*(clock: PClock): TTime #{.  cdecl, importc: "sfClock_getElapsedTime", dynlib: LibS.}
+
+proc restart*(clock: PClock): TTime #{.  cdecl, importc: "sfClock_restart", dynlib: LibS, discardable.}
+
+{.pop.}
+{.push importc: "sfTime_$1".}
+proc asSeconds*(time: TTime): cfloat #{.  cdecl, importc: "sfTime_asSeconds", dynlib: LibS.}
+proc asMilliseconds*(time: TTime): int32 #{.  cdecl, importc: "sfTime_asMilliseconds", dynlib: LibS.}
+proc asMicroseconds*(time: TTime): int64 #{.  cdecl, importc: "sfTime_asMicroseconds", dynlib: LibS.}
+
+{.pop.}
+{.push importc: "sf$1".}
+proc Seconds*(seconds: cfloat): TTime #{.  cdecl, importc: "sfSeconds", dynlib: LibS.}
+proc Milliseconds*(ms: int32): TTime #{.  cdecl, importc: "sfMilliseconds", dynlib: LibS.}
+proc Microseconds*(us: int64): TTime #{.  cdecl, importc: "sfMicroseconds", dynlib: LibS.}
+{.pop.}
+{.pop.}
+
+{.pop.}
 
 proc `-`*(a, b: csfml.TTime): csfml.TTime {.inline.} = microseconds(a.asMicroseconds - b.asMicroseconds)
 proc `-=`*(a: var csfml.TTime; b: csfml.TTime) {.inline.} = a = a - b
@@ -1340,3 +1346,19 @@ proc distance*(a, b: TVector3f): float {.inline.} =
   result = (a - b).length()
 proc distanceSq*(a, b: TVector3f): float {.inline.} =
   result = (a - b).lengthSq()
+
+
+proc newRenderWindow*(handle: TWindowHandle, settings: PContextSettings = nil): PRenderWindow {.inline.} =
+  RenderWindow_createFromHandle(handle, settings)
+proc newRenderWindow*(mode: TVideoMode, title: cstring, style: int32, settings: PContextSettings = nil): PRenderWindow {.inline.}=
+  RenderWindow_create(mode, title, style, settings)
+
+proc getMousePosition*(relativeTo: PWindow): TVector2i {.inline.} = 
+  mouseGetPosition(relativeTo)
+proc setMousePosition*(pos: TVector2i; relativeTo: PWindow){.inline.}=
+  mouseSetPosition(pos, relativeTo)
+proc setMousePosition*(window: PWindow; pos: TVector2i) {.inline.} =
+  mouseSetPosition(pos, window)
+
+
+proc newClock*(): PClock {.inline.} = Clock_Create()
