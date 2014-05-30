@@ -9,15 +9,18 @@ import clibpp
 const
   graphics_h = "<SFML/Graphics.hpp>"
   window_h = "<SFML/Window.hpp>"
+  system_h = "<SFML/System.hpp>"
+
+proc sf (ident:string): string = "sf::"& ident
 
 var
   Style_Default* {.importc:"sf::Style::Default", header:graphics_h.}: uint32
 
 #type VideoMode* {.importc:"sf::VideoMode",header:window_h.} = object
 #    VideoMode(unsigned int modeWidth, unsigned int modeHeight, unsigned int modeBitsPerPixel = 32);
-class(VideoMode, importc:"sf::VideoMode", header:window_h):
+class(VideoMode, importc: sf"VideoMode", header:window_h):
   ##
-proc newVideoMode* (W,H: cuint; bpp = 32.cuint): VideoMode {.importc:"sf::VideoMode",header:window_h.} 
+proc newVideoMode* (W,H: cuint; bpp = 32.cuint): VideoMode {.importc:sf"VideoMode",header:window_h.} 
 
 type EventType*{.pure.} = enum
   Closed,                # ///< The window requested to be closed (no data)
@@ -38,29 +41,40 @@ type EventType*{.pure.} = enum
   JoystickMoved,         # ///< The joystick moved along an axis (data in event.joystickMove)
   JoystickConnected,     # ///< A joystick was connected (data in event.joystickConnect)
   JoystickDisconnected   # ///< A joystick was disconnected (data in event.joystickConnect)
-  
-  
-class(Event, importc:"sf::Event", header:window_h) do:
+
+
+class(Event, importc: sf"Event", header:window_h) do:
   ##
   var kind* {.importc:"type".}: EventType
 
-#class Window, "<SFML/Window.hpp>":
-
-class(Color, importc:"sf::Color", header:graphics_h):
+class(Color, importc:sf"Color", header:graphics_h):
   ##
-proc newColor* (r,g,b:uint8,a=255'u8): Color {.importc:"sf::Color",header:graphics_h.}
+proc newColor* (r,g,b:uint8,a=255'u8): Color {.importc: sf"Color",header: graphics_h.}
 
 
-class(CircleShape, importc:"sf::CircleShape", header:graphics_h):
-  proc setFillColor* (color:Color) 
+
+class(Vector2f, importc:sf"Vector2f",header:system_h):
+  discard
+proc vec2f* (x,y: float): Vector2f {.importc:sf"Vector2f", header:system_h.}
+
+
+
+class(CircleShape, importc:sf"CircleShape", header:graphics_h):
+  #proc setFillColor* (color:Color) 
   ##
 proc newCircleShape* (radius: float): CircleShape {.importc:"sf::CircleShape", header:graphics_h.}
 
 
+class(RectangleShape, importc:sf"RectangleShape", header:graphics_h):
+  proc setSize* (size: Vector2f)
+  proc getSize* : ptr Vector2f
 
-type Drawable = CircleShape # | RectangleShape | ...
 
-class(RenderWindow, importc: "sf::RenderWindow", header: window_h) do:
+type Drawable = CircleShape | RectangleShape #| ...
+proc setFillColor* (D:Drawable; color:Color) {.importcpp,header:graphics_h.}
+
+
+class(RenderWindow, importc: sf"RenderWindow", header: window_h) do:
   proc create* (mode:VideoMode; title:cstring; style:uint32)
   proc isOpen* : bool
   proc close* 
@@ -77,8 +91,13 @@ when isMainModule:
   proc main =
     var w{.noInit.}: RenderWindow
     w.create(newVideoMode(800,600,32), "foo", StyleDefault)
-    let shape = newCircleShape(100.0)
+    let 
+      shape = newCircleShape(100.0)
     shape.setFillColor newColor(0,255,0)
+    
+    var shape2{.noInit.}: RectangleShape
+    shape2.setSize vec2f(40,20)
+    shape2.setFillColor newColor(255,0,0)
     
     while w.isOpen:
       var event{.noinit.}: Event
@@ -88,6 +107,7 @@ when isMainModule:
       
       w.clear
       w.draw shape
+      w.draw shape2
       w.display
 
   main()  
