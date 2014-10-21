@@ -7,7 +7,8 @@ import glu
 
 # Initialize SFML
 
-var window = newRenderWindow(videoMode(640, 480, 32), "SFML Example", sfDefaultStyle)
+var contextSettings = newContextSettings(32, 0, 0, 0, 0)
+var window = newRenderWindow(videoMode(640, 480, 32), "SFML Example", sfDefaultStyle, addr(contextSettings))
 window.setFramerateLimit(60)
 
 # Initialize OpenGL
