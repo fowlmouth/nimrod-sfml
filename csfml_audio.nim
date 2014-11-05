@@ -1,7 +1,7 @@
 import
   csfml
 const
-  Lib = "libcsfml-audio.so.2.0"
+  Lib = "libcsfml-audio.so.2.(1|0)"
 {.deadCodeElim: on.}
 type
   PMusic* = ptr TMusic
