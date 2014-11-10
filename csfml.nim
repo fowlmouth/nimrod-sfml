@@ -5,6 +5,11 @@ when defined(linux):
     LibG = "libcsfml-graphics.so.2.(1|0)"
     LibS = "libcsfml-system.so.2.(1|0)"
     LibW = "libcsfml-window.so.2.(1|0)"
+elif defined(windows):
+  const
+    LibG = "csfml-graphics-(2.|2.1.)dll"
+    LibS = "csfml-system-(2.|2.1.)dll"
+    LibW = "csfml-window-(2.|2.1.)dll"
 else:
   {.error: "Platform unsupported".}
 {.deadCodeElim: on.}
@@ -155,10 +160,10 @@ type
     KeyCount              #/< Keep last -- the total number of keyboard keys
 when defined(linux): #or defined(bsd) ??
   type TWindowHandle* = clong
+elif defined(windows):
+  type TWindowHandle* = pointer    ##HWND__ ? windows is crazy. ##struct HWND__; typedef struct HWND__* sfWindowHandle;
 #elif defined(mac):
 #  type TWindowHandle* = pointer ##typedef void* sfWindowHandle; <- whatever the hell that is
-#elif defined(windows):
-#  type TWindowHandle* = HWND__ ? windows is crazy. ##struct HWND__; typedef struct HWND__* sfWindowHandle;
 const
   sfNone*         = 0
   sfTitlebar*     = 1 shl 0
