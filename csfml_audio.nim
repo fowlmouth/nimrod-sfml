@@ -1,7 +1,13 @@
 import
   csfml
-const
-  Lib = "libcsfml-audio.so.2.(1|0)"
+when defined(linux):
+  const
+    Lib = "libcsfml-audio.so.2.(1|0)"
+elif defined(windows):
+  const
+    Lib = "csfml-audio-(2.|2.1.)dll"
+else:
+  {.error: "Platform unsupported".}
 {.deadCodeElim: on.}
 type
   PMusic* = ptr TMusic
