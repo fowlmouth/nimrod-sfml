@@ -1372,4 +1372,4 @@ proc setMousePosition*(window: PWindow; pos: TVector2i) {.inline.} =
 {.pop.}
 {.pop.}
 
-proc newClock*(): PClock {.inline.} = Clock_Create()
+proc newClock*(): PClock {.inline.} = Clock_create()
