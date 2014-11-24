@@ -349,7 +349,7 @@ proc saveToFile*(soundBuffer: PSoundBuffer; filename: cstring): bool {.
 #/ \return Read-only pointer to the array of sound samples
 #/
 #//////////////////////////////////////////////////////////
-proc sfSoundBuffer_getSamples*(soundBuffer: PSoundBuffer): ptr Int16{.
+proc sfSoundBuffer_getSamples*(soundBuffer: PSoundBuffer): ptr int16{.
   cdecl, importc: "sfSoundBuffer_getSamples", dynlib: Lib.}
 #//////////////////////////////////////////////////////////
 #/ \brief Get the number of samples stored in a sound buffer
