@@ -15,7 +15,6 @@ else:
 {.deadCodeElim: on.}
 {.pragma: pf, pure, final.}
 type
-  microseconds* = int64
   PClock* = ptr TClock
   TClock* {.pf.} = object
   TTime* {.pf.} = object
@@ -1178,12 +1177,12 @@ proc Microseconds*(us: int64): TTime #{.  cdecl, importc: "sfMicroseconds", dynl
 
 {.pop.}
 
-proc `-`*(a, b: csfml.TTime): csfml.TTime {.inline.} = TTime(microseconds: (a.asMicroseconds - b.asMicroseconds))
+proc `-`*(a, b: csfml.TTime): csfml.TTime {.inline.} = Microseconds(a.asMicroseconds - b.asMicroseconds)
 proc `-=`*(a: var csfml.TTime; b: csfml.TTime) {.inline.} = a = a - b
-proc `+`*(a, b: csfml.TTime): csfml.TTime {.inline.} = TTime(microseconds: (a.asMicroseconds + b.asMicroseconds))
+proc `+`*(a, b: csfml.TTime): csfml.TTime {.inline.} = Microseconds(a.asMicroseconds + b.asMicroseconds)
 proc `+=`*(a: var csfml.TTime; b: csfml.TTime) {.inline.} = a = a + b
 proc `<`*(a, b: csfml.TTime): bool {.inline.} = a.asMicroseconds < b.asMicroseconds
-let ZeroTime* = microseconds(0)
+let ZeroTime* = Microseconds(0)
 
 
 proc newContextSettings*(depthBits: cint = 0,
