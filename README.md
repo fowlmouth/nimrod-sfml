@@ -1,6 +1,8 @@
 sfml-nimrod
 ===========
 
+*This wrapper is outdated.* Please use this newer CSFML wrapper: https://github.com/BlaXpirit/nim-csfml
+
 Nimrod binding of SFML 2.0
 
 This is only tested for Linux at the moment
