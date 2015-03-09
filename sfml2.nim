@@ -5,20 +5,34 @@ when not defined(CPP):
 
 import clibpp
 
-{.passl: "-lsfml-graphics -lsfml-window -lsfml-system".}
+when defined(Linux):
+  {.passl: "-lsfml-graphics -lsfml-window -lsfml-system".}
+elif defined(Windows):
+  #{.passl: """/LIBPATH:.\lib""".}
+  {.link: "./lib/freetype.lib".}
+  {.link: "./lib/glew.lib".}
+  {.link: "./lib/jpeg.lib".}
+  {.link: "./lib/openal32.lib".}
+  {.link: "./lib/sfml-audio.lib".}
+  {.link: "./lib/sfml-graphics.lib".}
+  {.link: "./lib/sfml-main.lib".}
+  {.link: "./lib/sfml-network.lib".}
+  {.link: "./lib/sfml-system.lib".}
+  {.link: "./lib/sfml-window.lib".}
+  {.link: "./lib/sndfile.lib".}
 const
   graphics_h = "<SFML/Graphics.hpp>"
   window_h = "<SFML/Window.hpp>"
   system_h = "<SFML/System.hpp>"
 
-proc sf (ident:string): string = "sf::"& ident
-
 var
   Style_Default* {.importc:"sf::Style::Default", header:graphics_h.}: uint32
 
+proc sf* (some: static[string]): string = "sf::"&some
+
 #type VideoMode* {.importc:"sf::VideoMode",header:window_h.} = object
 #    VideoMode(unsigned int modeWidth, unsigned int modeHeight, unsigned int modeBitsPerPixel = 32);
-class(VideoMode, importc: sf"VideoMode", header:window_h):
+class(VideoMode, ns:"sf", header:window_h):
   ##
 proc newVideoMode* (W,H: cuint; bpp = 32.cuint): VideoMode {.importc:sf"VideoMode",header:window_h.} 
 
@@ -43,38 +57,39 @@ type EventType*{.pure.} = enum
   JoystickDisconnected   # ///< A joystick was disconnected (data in event.joystickConnect)
 
 
-class(Event, importc: sf"Event", header:window_h) do:
+class(Event, ns:"sf", header:window_h):
   ##
   var kind* {.importc:"type".}: EventType
 
-class(Color, importc:sf"Color", header:graphics_h):
+class(Color, ns:"sf", header:graphics_h):
   ##
 proc newColor* (r,g,b:uint8,a=255'u8): Color {.importc: sf"Color",header: graphics_h.}
 
 
 
-class(Vector2f, importc:sf"Vector2f",header:system_h):
+class(Vector2f, ns:"sf", header:system_h):
   discard
 proc vec2f* (x,y: float): Vector2f {.importc:sf"Vector2f", header:system_h.}
 
+class(Shape, inheritable, ns:"sf", header:graphics_h):
+  discard
 
-
-class(CircleShape, importc:sf"CircleShape", header:graphics_h):
+class(CircleShape of Shape, ns:"sf", header:graphics_h):
   #proc setFillColor* (color:Color) 
   ##
 proc newCircleShape* (radius: float): CircleShape {.importc:"sf::CircleShape", header:graphics_h.}
 
 
-class(RectangleShape, importc:sf"RectangleShape", header:graphics_h):
+class(RectangleShape of Shape, ns:"sf", header:graphics_h):
   proc setSize* (size: Vector2f)
   proc getSize* : ptr Vector2f
 
 
 type Drawable = CircleShape | RectangleShape #| ...
-proc setFillColor* (D:Drawable; color:Color) {.importcpp,header:graphics_h.}
+proc setFillColor* (this:Drawable; color:Color) {.importcpp,header:graphics_h.}
 
 
-class(RenderWindow, importc: sf"RenderWindow", header: window_h) do:
+class(RenderWindow, ns:"sf", header: window_h):
   proc create* (mode:VideoMode; title:cstring; style:uint32)
   proc isOpen* : bool
   proc close* 
